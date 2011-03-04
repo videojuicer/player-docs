@@ -1,0 +1,156 @@
+FlashVars in Player-v4
+======================
+
+Player Application Configuration
+================================
+
+Environment
+-----------
+
+Specifies the environment used to create the Videojuicer URLs.
+
+- Parameter: env
+- Alternatives: N/A
+- Type: String (development, staging or production)
+
+Bootstrap Environment
+---------------------
+
+Specifies an override environment to use when creating the URI for the Bootstrap from Videojuicer. Declaring this property overrides the 'environment' property for the Bootstrap only.
+
+- Parameter: bootstrap_env
+- Alternatives: N/A
+- Type: String (development, staging or production)
+
+SMIL Environment
+----------------
+
+Specifies an override environment to use when creating the URI for the SMIL document from Videojuicer. Declaring this property overrides the 'environment' property for the SMIL document only.
+
+- Parameter: smil_env
+- Alternatives: N/A
+- Type: String (development, staging or production)
+
+Logger Environment
+------------------
+
+Specifies an override environment to use when setting up the loggers. Declaring this property overrides the 'environment' property for the logger only. When set to production all log renderers are disabled, staging + development activate the trace and browser log renderer.
+
+- Parameter: logger_env
+- Alternatives: N/A
+- Type: String (development, staging or production)
+
+Loader Style
+------------
+
+A StyleSheet string that is applied to the Loader User Interface on first bootup (before any session or bootstrap is loaded). The CSS strings content should include rules and selectors as such:
+
+  ._loader-ui { background-color: #000000; }
+
+- Parameter: loader_style
+- Alternatives: N/A
+- Type: String
+
+Affiliate ID
+------------
+
+- Parameter: affilate_id
+- Alternatives: affiliateid, affilate
+- Type: Integer
+
+UI Idle Timeout
+---------------
+
+Specifies in seconds when the user interface should start becoming idle, this time specifies how long the player should wait before declaring an idle state (this happens when the user has no registered any mouse movement, clicks or keyboard events).
+
+- Parameter: ui_idle_timeout
+- Alternatives: N/A
+- Type: Integer (in seconds)
+
+Logger - Ignore Applications
+----------------------------
+
+A comma delimited list of applications that the internal logger should ignore when rendering each log message. Any application signature that is declared in this string will be ignored when the log message is pushed out to renderers.
+
+- Parameter: _loggerignore
+- Alternatives: _ignore_applications
+- Type: String (comma delimited)
+
+Logger - Benchmark
+----------------------------
+
+Specifies whether benchmark messages should be sent to the renderer, defaults to true. Overrides applications that are specified in the ignore list but does not override the logger environment. 
+
+- Parameter: _benchmark
+- Alternatives: N/A
+- Type: Boolean
+
+Initial Session Configuration
+=============================
+
+Presentation ID
+---------------
+
+Specifies the presentation ID to use when creating the Videojuicer URI for the bootstrap and SMIL documents.
+
+The generated Videojuicer URI can be overridden by the Bootstrap + SMIL URI properties.
+
+- Parameter: presentation_id
+- Alternatives: presentationid
+- Type: Integer
+
+Seed Name
+---------
+
+Specifies the seed name to use when creating the Videojuicer URI for the bootstrap and SMIL documents.
+
+The generated Videojuicer URI can be overridden by the Bootstrap + SMIL URI properties.
+
+- Parameter: seed_name
+- Alternatives: seedname
+- Type: String
+
+Bootstrap URI
+-------------
+
+Specifies the Bootstrap URI to use instead of creating a Videojuicer one.
+
+- Parameter: bootstrap_uri
+- Alternatives: bootstrapuri
+- Type: URI
+
+SMIL URI
+--------
+
+Specifies the SMIL document URI to use instead of creating a Videojuicer one.
+
+- Parameter: smil_uri
+- Alternatives: smiluri
+- Type: URI
+
+Auto-Play
+---------
+
+Specifies that the player will automatically begin playback of the session as soon as possible.
+
+- Parameter: auto-play
+- Alternatives: autoplay
+- Type: Boolean
+
+Auto-Repeat
+-----------
+
+Specifies that the initial session loaded into the player will automatically repeat endless until stopped or paused.
+
+- Parameter: auto-repeat
+- Alternatives: autorepeat
+- Type: Boolean
+
+Show Controls
+-------------
+
+Specifies whether the controls are available and shown on the players screen or hidden from sight.
+
+- Parameter: show-controls
+- Alternatives: showcontrols
+- Type: Boolean

@@ -1,0 +1,22 @@
+Videojuicer Player API Docs
+==============================
+
+The Videojuicer v4 Player has a tremendous amount of flexibility built-in; from the ability to customise the player's appearance using CSS3, to adding custom functionality to the user interface, to completely rebuilding the user interface to your own design.
+
+These documents cover the APIs available to you for customising the Videojuicer Player.
+
+Basic embedding
+---------------
+
+See flashvars_guide.mdown for details on the flashVars/parameters available to you when embedding the player.
+
+Advanced embedding
+------------------
+
+See browser_api.mdown for details on the Javascript API available to you for more advanced integrations.
+
+Addon developers
+-----------------
+
+* For guidance on the built-in user interface objects available to addon developers, see ui_api.mdown
+* For guidance on customising the appearance of the built-in user interface, see ui_skin_guide.mdown

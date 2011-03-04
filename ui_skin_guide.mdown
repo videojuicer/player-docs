@@ -1,0 +1,190 @@
+The base player UI, and how to skin it
+======================================
+
+Play Button
+===========
+
+  Type
+  ----
+  "Button"
+
+  Path
+  ----
+  //controls/playback-toggle
+
+  CSS Path
+  --------
+  ._controls ._playback-toggle
+  
+  CSS classes
+  -----------
+  
+    _play
+      Present when the viewport is playing
+    _pause
+      Present when the viewport is paused. The button is created in this state.
+      
+Timeline slider
+===============
+
+  Type
+  ----
+  "Slider"
+  
+  Path
+  ----
+  //controls/timeline
+  
+  CSS Path
+  --------
+  ._controls ._timeline
+  
+  CSS classes
+  -----------
+  
+    _unready
+      Present when the viewport is waiting for any operation to complete before playback begins
+    _ready
+      Present when the viewport is in its ready state. The slider is created in this state.
+    _hours-long
+      Present when the viewports SMIL document has a duration longer than an hour.
+    _duration-resolved
+      Present when the presentation has a known duration
+    _duration-unresolved
+      Present when the presentation has unknown or indeterminate duration.
+
+The playback head
+=================
+  
+  Type
+  ----
+  "SliderHead"
+  
+  Path
+  ----
+  //controls/timeline/play-head
+  
+  CSS Path
+  --------
+  ._controls ._timeline ._play-head
+  
+  CSS Classes
+  -----------
+  
+    ._dragging
+      Present when the head is being dragged.
+
+The volume button
+=================
+
+  Type
+  ----
+  "Button"
+
+  Path
+  ----
+  //controls/volume-toggle
+
+  CSS Path
+  --------
+  ._controls ._volume-toggle
+
+  CSS classes
+  -----------
+
+    _unmuted
+      Present when the viewport's audio is above zero. Created in this state.
+    _muted
+      Present when the viewport is muted.
+
+Volume slider
+=============
+
+  Type
+  ----
+  "Slider"
+
+  Path
+  ----
+  //controls/volume-toggle/volume-slider
+
+  CSS Path
+  --------
+  ._controls ._volume-toggle ._volume-slider
+
+  CSS classes
+  -----------
+
+    N/A
+    
+The Fullscreen button
+=====================
+
+  Type
+  ----
+  "Button"
+
+  Path
+  ----
+  //controls/fullscreen-toggle
+
+  CSS Path
+  --------
+  ._controls ._fullscreen-toggle
+
+  CSS classes
+  -----------
+
+    _windowed
+      Present when the player is running in a window. Created in this state.
+    _fullscreen
+      Present when the player is running in full-screen mode.
+      
+The Overlay Play button
+=======================
+
+  Type
+  ----
+  "Button"
+
+  Path
+  ----
+  //playback-toggle-overlay
+
+  CSS Path
+  --------
+  ._playback-toggle-overlay
+
+  CSS classes
+  -----------
+
+     _play
+       Present when the viewport is playing
+     _pause
+       Present when the viewport is paused. The button is created in this state.
+     _hasPlayed
+       Present when the viewport has begun playing at least once, and never removed thereafter.
+       
+The loading/waiting indicator
+=============================
+  
+  Type
+  ----
+  "Box"
+  
+  Path
+  ----
+  //playback-wait-indicator,
+  //playback-wait-indicator/inner (an internal box to assist with styling)
+  //playback-wait-indicator/inner/label (a text label which may be styled by the skin author)
+  
+  CSS Path
+  --------
+  ._playback-wait-indicator,
+  ._playback-wait-indicator-inner,
+  ._playback-wait-indicator-label
+  
+  CSS Classes
+  -----------
+  
+    N/A

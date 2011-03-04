@@ -1,0 +1,697 @@
+Globally-available player namespace
+===================================
+
+The player provides a globally-addressable namespace for system methods - any call to "player.methodNameGoesHere" is considered a system call.
+
+The player namespace supports all the methods, events and bind variables provided by the Viewport element type; for instance, the following method will pause playback on the built-in viewport:
+
+    player.pause
+    
+As well as providing all the common viewport functionality, the player namespace provides the following:
+
+  Methods:
+  --------
+  
+    player.sessionCreate(options)
+      Loads an entirely new session into the player, having an effect similar to completely reloading the player with a new set of flashVars.
+      Any options you do not specify will be held over from the currently-loaded session.
+      For a less destructive means of loading new content, see the "self.setLocation" method on the "Viewport" object.
+    player.sessionBack
+      Loads the previous session into the player
+    player.sessionForward
+      Reloads a session that was unloaded by a call to player.sessionBack
+
+  Events
+  ------
+
+    player.fullscreen
+      The player went into fullscreen mode
+    player.windowed
+      The player went from fullscreen mode back into windowed mode
+    player.userIdle
+      The user stopped interacting with the player (no mouse movement or focus was lost)
+    player.userEngaged
+      The user re-engaged with the player (the mouse moved or focus was gained)
+
+
+Bind variables
+==============
+
+Any argument provided to a method call on a UI element may access internal player properties by using the following syntax:
+
+    #var:path.property
+    
+For instance, you may set the maximum value of a slider head to the duration of a viewport's loaded document by calling:
+  
+    mySliderHead.send("self.setMaxValue", "#var://path/to/my/viewport.duration")
+    
+You may also use the player.* convenience syntax to refer to the player's built-in viewport:
+
+    mySliderHead.send("self.setMaxValue", "#var:player.duration")
+
+UI Element types creatable through the Addon service:
+=====================================================
+
+All elements
+============
+
+  Configuration
+  -------------
+
+    class (optional)
+      A CSS class or set of CSS classes (space-delimited) to add to the element upon creation.
+
+  Methods
+  -------
+  
+    self.show
+      Shows the element by adding the "show" class and removing the "hide" class.
+    self.hide
+      Hides the element by adding the "hide" class and removing the "show" class.
+    self.click
+      Called when the element is clicked. Also callable to partially-simulate the click.
+    self.mouseOver
+    self.mouseOut
+    self.mouseDown
+    self.mouseUp
+
+Buttons
+=======
+
+  Type
+  ----
+  "Button"
+
+  Markup
+  ------
+
+      ._button (the wrapping element)
+        ._icon (the area available for graphics)
+        ._label (the area available for text)
+        ._menu (the menu element, if a menu has been attached)
+
+  Acceptable child elements
+  -------------------------
+
+      Menu
+        A menu may be added to a button.%
+
+  Configuration
+  -------------
+  
+      text (optional)
+        The text to be initially displayed in the button label
+
+  Methods
+  -------
+
+      See global methods.
+
+Sliders
+=======
+
+  Type
+  ----
+  "Slider"
+
+  Markup
+  ------
+
+      ._slider (the wrapping element)
+        .min-label
+        ._gutter
+          ._fill-container
+            .min-fill (The bar which will be automatically sized to match the SliderHead's value, if present.)
+          ._marker-container (SliderMarker children are appended to this element)
+          ._head-container (SliderHead children are appended to this element)
+        .max-label
+
+  Styling gotchas
+  ---------------
+  
+  Avoid styling the .min-fill element's width, for horizontal sliders, and it's height for vertical sliders. This style property is set automatically
+  by the Slider's internal behaviour.
+
+  Acceptable child elements
+  -------------------------
+
+      SliderHead
+        A slider may contain a single draggable head
+      SliderMarker
+        A slider may contain any number of clickable (but not draggable markers)
+
+  Configuration
+  -------------
+
+      orientation (default="horizontal", valid=(horizontal|vertical))
+        Configures the slider to operate in the given orientation.      
+      minLabel
+        The text label to be displayed at the left|bottom edge of the slider (depending on orientation)
+      maxLabel
+        The text label to be displayed at the right|top edge of the slider (depending on orientation)
+      
+
+  Methods
+  -------
+
+      self.click
+        Calls the global click method (see global methods)
+        Additionally calls setValue on the SliderHead, if one is present.
+      self.setMinLabel(value="theLabel")
+        Sets the text of the minLabel. Also updates the corresponding config option.
+      self.setMaxLabel(value="theLabel")
+        Sets the text of the maxLabel. Also updates the corresponding config option.
+      
+Slider markers
+==============
+
+  Type
+  ----
+  "SliderMarker"
+
+  Markup
+  ------
+
+      ._slider-marker (the wrapping element)
+        ._slider-marker-inner
+
+  Styling gotchas
+  ---------------
+  
+  Avoid styling the positioning properties (top/left/right/bottom) on the ._slider-marker element itself, as these are used to place the marker on the slider.
+  The ._slider-marker-inner element is provided to allow you to "nudge" the marker's position using position: relative.
+
+  Acceptable child elements
+  -------------------------
+
+      None
+
+  Configuration
+  -------------
+
+      minValue
+      maxValue
+
+  Methods
+  -------
+
+      self.setMinValue
+        Sets the min value for this marker
+      self.setMaxValue
+        Sets the max value for this marker
+      self.setValue
+        Sets the value of this marker, positioning it on the parent Slider as appropriate.
+      self.notifyValue
+        Sets the value of this marker as in self.setValue. Intended to be called when receiving updates from external sources.
+        
+Slider heads
+============
+
+  Type
+  ----
+  "SliderHead"
+
+  Markup
+  ------
+
+      ._slider-head (the wrapping element)
+        ._slider-head-inner
+
+  Styling gotchas
+  ---------------
+  
+  See Slider markers
+
+  Acceptable child elements
+  -------------------------
+
+      None
+
+  Configuration
+  -------------
+
+      minValue
+      maxValue
+      setValueCallback
+        A message to dispatch when self.setValue is called. This is different to a regular ui.on callback as the head's value is dispatched with the message as the "value" argument.
+
+  Methods
+  -------
+
+      self.setMinValue
+        Sets the min value for this marker
+      self.setMaxValue
+        Sets the max value for this marker
+      self.setValue
+        Sets the value of this head, positioning it on the parent Slider as appropriate.
+      self.notifyValue
+        Notifies the head that a new value is available for it. Semantically different from setValue in that setValue is an imperative (usually triggered by user action), 
+        while notifyValue is more similar to an event. For instance, notifyValue will not make any changes to a slider head if it is currently being dragged.
+      self.startDrag
+        Starts following the mouse cursor. Called automatically on mouseDown. Mouse movement while dragging will call self.setValue as appropriate.
+      self.stopDrag
+        Stops following the mouse cursor. Called automatically on mouseRelease or mouseReleaseOutside. Calls self.setValue.
+
+Media viewports
+===============
+  
+  Type
+  ----
+  "Viewport"
+
+  Markup
+  ------
+
+      ._viewport
+
+  Styling gotchas
+  ---------------
+  
+  N/A
+
+  Acceptable child elements
+  -------------------------
+
+      None
+
+  Configuration
+  -------------
+
+      url
+        The location of the SMIL document for the viewport to load. May be a remote URI or a data URI.
+      autoRepeat (default="false", valid="true|false")
+        Determines whether the viewport should automatically restart from the beginning once playback has completed.
+      autoPlay (default="false", valid="true|false")
+        Determines whether playback should begin automatically whenever a SMIL document is successfully loaded into the viewport.
+
+  Methods
+  -------
+
+      self.resume
+        Playback begins for the first time or resumed.
+      self.pause
+        Pauses playback within this viewport.
+      self.toggle
+        Toggles playback within this viewport.
+      self.refresh
+        Reloads the SMIL document and resets the state of playback.
+      self.seekTo(value)
+        Seeks to the given millisecond value and immediately commits the seek, restoring playback to the previous state.
+      self.seekToUncommitted(value)
+        Seeks to the given millisecond offset without committing the seek action. While in an uncommitted seek state, the viewport will not preload any assets
+        and may be moved to any millisecond offset without incurring a performance penalty. Ideal for use with sliders to control playback.
+      self.seekCommit
+        Restores playback to the previous state after an uncommitted seek.
+      self.setLocation(url)
+        Loads a new SMIL document into this viewport using either a remote URI or a data URI. Use the 'self.refreshed' event to perform actions when the document has loaded.
+      self.back
+        Loads a previously-loaded SMIL document by moving backwards one step along the viewport's history of loaded SMIL documents.
+      self.forward
+        Loads a previously-loaded SMIL document by moving forwards one step through the viewport's history of loaded SMIL documents.
+      self.setVolumePercentage(value)
+        Sets the volume of audio playback on this viewport using a value between 0 and 100 inclusive.
+      self.mute
+        Mutes audio from this viewport. Also dispatched as an event whenever the volume is set to zero.
+      self.unmute
+        Restores the audio volume to the previous pre-mute level on this viewport. Also dispatched as an event when the volume is changed from zero to a higher value.
+      self.toggleMute
+        Toggles between muted and unmuted playback.
+      
+  
+  Bindable events
+  ---------------
+  
+  The following are available as bindable events on viewport objects, but not callable directly as methods.
+    
+      self.ready
+        Dispatched when the viewport is ready to continue playback at the current offset.
+      self.unready
+        Dispatched when the viewport is waiting for one or more internal operations to complete before playback can continue.
+      self.refreshed
+        Dispatched when a refresh operation has completed or a new SMIL document has been loaded and is ready for use.
+      self.offset
+        Dispatched whenever the viewport's current playback offset changes.
+      self.duration
+        Dispatched when the duration of the loaded SMIL document may have changed.
+      self.durationResolved
+        Dispatched when the duration of the loaded SMIL document is known.
+      self.durationUnresolved
+        Dispatched when the duration of the loaded SMIL document is unknown.
+      self.volume
+        Audio level was adjusted, muted or unmuted.
+      self.start
+        Playback has begun for the first time. Subsequent resume calls will not trigger this event.
+      self.end
+        The play head has reached the end of the presentation.
+        
+  Bind args
+  ---------
+  
+      offset
+        The current position of the viewport's play head, in milliseconds e.g. "90000"
+      offsetAsWallclock
+        The current position of the viewport's play head as a clock value e.g. "01:30"
+      duration
+        The duration of the viewport's loaded document in milliseconds e.g. "120000"
+      durationAsWallclock
+        The duration of the viewport's loaded document as a clock value e.g. "02:00"
+      remainingTime
+        The amount of playback time remaining, equivalent to duration minus offset, in milliseconds e.g. "30000"
+      remainingTimeAsWallclock
+        The amount of playback time remaining, equivalent to duration minus offset, as a clock value .g. "00:30"
+      volume
+        The current volume level e.g. "50"
+      volumeAsPercentage
+        The current volume level as a percentage string e.g. "50%"
+      
+  
+Controls
+========
+
+  Type
+  ----
+  "Box"
+
+  Markup
+  ------
+
+      ._box (the box element)
+
+  Acceptable child elements
+  -------------------------
+
+      *
+        Accepts any element as a child.
+
+  Configuration
+  -------------
+
+      direction (optional)
+        The direction to apply to the Box, the direction adds a ._vertical or ._horizontal class to the element.
+
+  Methods
+  -------
+
+      See global methods.
+
+
+  Type
+  ----
+  "TextValue"
+
+  Markup
+  ------
+
+      ._label._text-field (the box element)
+
+  Acceptable child elements
+  -------------------------
+
+      N/A
+
+  Configuration
+  -------------
+
+      text
+        The text to display inside the text field.
+
+  Methods
+  -------
+
+      See global methods.
+      
+
+  Type
+  ----
+  "TextValueField"
+
+  Markup
+  ------
+
+      ._text-field (the box element)
+
+  Acceptable child elements
+  -------------------------
+
+      N/A
+
+  Configuration
+  -------------
+
+      text
+        The text to display inside the text field.
+
+      editable
+        Specifies whether the TextValueField is editable, true by default.
+
+      password
+        Specifies whether the TextValueField acts as a password input and masks the text, false by default.
+
+  Methods
+  -------
+
+      See global methods.
+      
+Forms
+=====
+
+  Type
+  ----
+  "Form"
+
+  Markup
+  ------
+
+      ._form (the wrapping box element)
+
+  Acceptable child elements
+  -------------------------
+
+      TextValueField, Fieldset
+
+  Configuration
+  -------------
+
+      onSubmitCallback
+        A method to send the form's serialized data to, when the form is submitted. The specified method will receive a "data" argument containing a serialized hash of the form's input names and values. Most commonly, this would be used with a server method (e.g. server.processMyForm) to relay form data to your addon for server-side processing. 
+
+  Methods
+  -------
+
+      self.submit
+        Submits the form by triggering the onSubmitCallback.
+      self.reset
+        Calls self.reset on all form inputs within this form.
+        
+Form Fieldsets
+==============
+
+  Type
+  ----
+  "Fieldset"
+
+  Markup
+  ------
+
+      ._fieldset (the wrapping box element)
+
+  Acceptable child elements
+  -------------------------
+
+      TextValueField, Button, any form input type
+
+  Configuration
+  -------------
+
+      label
+        The text contents of the label/header for this fieldset.
+
+  Methods
+  -------
+
+      See global methods.
+
+Form Fields
+===========
+
+  Type
+  ----
+  Varies. See individual field type.
+
+  Markup
+  ------
+
+      ._input-wrapper (the wrapping box element)
+        ._label (the text label element)
+        ._input (the wrapping box containing the input control itself)
+          .* (see individual field type documentation for details of markup below this level)
+
+  Acceptable child elements
+  -------------------------
+
+    None
+
+  Configuration
+  -------------
+
+      label
+        The text contents of the label for this field.
+      value
+        The initial/default value for this field
+      name
+        The field's name, used as the key when the containing form is serialized.
+
+  Methods
+  -------
+
+      All form fields provide the usual global methods, plus:
+      
+      self.setValue(value)
+        Sets the current value of this field.
+      self.reset
+        Resets this field to it's initial value by calling self.setValue with the initial value supplied. 
+        Note: self.reset will trigger callbacks for self.setValue as well as self.reset
+      self.focus
+        Applies focus to this element
+      self.blur
+        Removes focus from this element
+      
+      Some field types present additional methods. See individual field type documentation for details.
+  
+
+Form fields: Text input fields
+==============================
+
+  Type
+  ----
+  "TextInput"
+
+  Markup
+  ------
+
+      ._input-wrapper._text-input-wrapper (the wrapping box element)
+              ._label (the text label element)
+              ._input (the wrapping box containing the input control itself)
+                ._text-input
+
+  Configuration
+  -------------
+
+      See "Form Fields"
+      Unless otherwise specified, the initial/default value for a text field is an empty string.
+
+  Methods
+  -------
+
+      See "Form Fields"
+      
+  Serialization
+  -------------
+  
+      Text inputs are always serialized using the current text content of the input, regardless of whether or not it has been modified.
+      
+Form fields: Password input fields
+==================================
+
+  Type
+  ----
+  "PasswordInput"
+
+  Markup
+  ------
+
+      ._input-wrapper._text-input-wrapper._password-input-wrapper (the wrapping box element)
+              ._label (the text label element)
+              ._input (the wrapping box containing the input control itself)
+                ._text-input._password-input
+
+  Configuration
+  -------------
+
+      See "Form Fields" and "Form Fields: Text input fields"
+
+  Methods
+  -------
+
+      See "Form Fields" and "Form Fields: Text input fields"
+
+  Serialization
+  -------------
+
+      See "Form Fields" and "Form Fields: Text input fields"
+      
+Form fields: Checkbox fields
+============================
+
+  Type
+  ----
+  "CheckboxInput"
+
+  Markup
+  ------
+
+      ._input-wrapper._checkbox-input-wrapper (the wrapping box element)
+              ._label (the text label element)
+              ._input (the wrapping box containing the input control itself)
+                ._checkbox-input (the :checked pseudoclass is added when the control is checked. The element is created in an unchecked state by default.)
+
+  Configuration
+  -------------
+
+  	  checked
+    	  Specifies whether the checkbox is checked or not.
+
+      See "Form Fields"
+      Unless otherwise specified, the initial/default value will be "1".
+
+  Methods
+  -------
+
+      See "Form Fields"
+      
+      self.check
+        Marks the checkbox as checked. By default this method is called during any self.click event while the box is unchecked.
+      self.uncheck
+        Marks the checkbox as unchecked. By default this method is called during any self.click event while the box is checked.
+        
+  Serialization
+  -------------
+
+      Checkboxes are serialized using their value only if they have been checked. Unchecked checkboxes are not serialized at all, just as with a regular HTML form.
+      
+Form fields: Radio fields
+=========================
+
+  Type
+  ----
+  "RadioInput"
+
+  Markup
+  ------
+
+      ._input-wrapper._radio-input-wrapper (the wrapping box element)
+              ._label (the text label element)
+              ._input (the wrapping box containing the input control itself)
+                ._radio-input (the :checked pseudoclass is added when the control is checked. The element is created in an unchecked state by default.)
+
+  Configuration
+  -------------
+
+      See "Form Fields"
+
+  Methods
+  -------
+
+      See "Form Fields"
+
+      self.check
+        Marks the checkbox as checked. By default this method is called during any self.click event while the box is unchecked.
+        Checking a radio input automatically calls self.uncheck on any other radio inputs with the same name in the same ancestor form.
+      self.uncheck
+        Marks the checkbox as unchecked.
+
+  Serialization
+  -------------
+
+      Just as with regular HTML radio buttons, the "value" of a group of identically-named radio inputs will be the value of the checked input, if one is checked.
+      If none of the radio inputs is checked, then the field will not be serialized.
