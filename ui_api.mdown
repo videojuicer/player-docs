@@ -363,6 +363,8 @@ Media viewports
         The current volume level e.g. "50"
       volumeAsPercentage
         The current volume level as a percentage string e.g. "50%"
+      location
+        The URI (which may be either a data URI or a regular resource URI) of the currently-loaded SMIL document
       
   
 Controls
