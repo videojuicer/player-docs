@@ -53,6 +53,26 @@ Timeline slider
     _duration-unresolved
       Present when the presentation has unknown or indeterminate duration.
 
+The load progress indicator
+===========================
+
+  Type
+  ----
+  "SliderFill"
+
+  Path
+  ----
+  //controls/timeline/load-indicator-bar
+
+  CSS Path
+  --------
+  ._controls ._timeline ._load-indicator-bar
+
+  CSS Classes
+  -----------
+
+    N/A
+
 The playback head
 =================
   

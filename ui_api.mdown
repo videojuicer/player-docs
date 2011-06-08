@@ -120,7 +120,7 @@ Sliders
       ._slider (the wrapping element)
         .min-label
         ._gutter
-          ._fill-container
+          ._fill-container (SliderFill children are appended to this element)
             .min-fill (The bar which will be automatically sized to match the SliderHead's value, if present.)
           ._marker-container (SliderMarker children are appended to this element)
           ._head-container (SliderHead children are appended to this element)
@@ -252,6 +252,52 @@ Slider heads
       self.stopDrag
         Stops following the mouse cursor. Called automatically on mouseRelease or mouseReleaseOutside. Calls self.setValue.
 
+Slider Fills
+============
+
+  Type
+  ----
+  "SliderFill"
+
+  Markup
+  ------
+
+      ._slider-fill
+
+  Acceptable child elements
+  -------------------------
+
+      N/A
+  
+  Styling gotchas
+  ---------------
+
+      On vertical sliders, avoid using the "height", "min-height", "max-height" and any other height-related property.
+      On horizontal sliders, avoid using any width-related properties.
+      On vertical sliders, avoid using any kind of absolute Y positioning as this is managed internally.
+      On horizontal sliders, avoid using any kind of absolute X positioning as this is managed internally.
+
+  Configuration
+  -------------
+
+      minValue (defaults to 0)
+        The value for the min end of the slider (left for horizontal sliders, bottom for vertical)
+      maxValue (defaults to 1.0)
+        The value for the max end of the slider (right for horizontal, top for vertical)
+
+  Methods
+  -------
+
+      self.setMinValue(value)
+        Sets the minValue configuration variable
+      self.setMaxValue(value)
+        Sets the maxValue configuration variable
+      self.setLowerBound(value)
+        Sets the "low" end of the fill at the given value, constrained to the minValue and maxValue configurations.
+      self.setUpperBound(value)
+        Sets the "high" end of the fill at the given value, constrained to the minValue and maxValue configurations.
+        
+
 Media viewports
 ===============
   
@@ -337,6 +383,18 @@ Media viewports
         Dispatched when the duration of the loaded SMIL document is known.
       self.durationUnresolved
         Dispatched when the duration of the loaded SMIL document is unknown.
+      self.bytesLoaded
+        Dispatched when the number of bytes loaded by the viewport is modified in any way.
+      self.bytesLoadedResolved
+        Dispatched when the number of bytes loaded by the viewport becomes known
+      self.bytesLoadedUnresolved
+        Dispatched when the number of bytes loaded by the viewport becomes unknown
+      self.bytesTotal
+        Dispatched when the total size of all assets in the viewport's document changes
+      self.bytesTotalResolved
+        Dispatched when the total size of all assets in the viewport's document becomes known
+      self.bytesTotalUnresolved
+        Dispatched when the total size of all assets in the viewport's document becomes unknown
       self.volume
         Audio level was adjusted, muted or unmuted.
       self.start
@@ -355,6 +413,10 @@ Media viewports
         The duration of the viewport's loaded document in milliseconds e.g. "120000"
       durationAsWallclock
         The duration of the viewport's loaded document as a clock value e.g. "02:00"
+      bytesLoaded
+        The current amount of bytes loaded by the viewport's asset loader mechanism, or "0" if it is not known.
+      bytesTotal
+        The current total size of all the assets in the viewport's current document, or "0" if it is not known.
       remainingTime
         The amount of playback time remaining, equivalent to duration minus offset, in milliseconds e.g. "30000"
       remainingTimeAsWallclock
