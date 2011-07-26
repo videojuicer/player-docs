@@ -60,6 +60,8 @@ All elements
 
     class (optional)
       A CSS class or set of CSS classes (space-delimited) to add to the element upon creation.
+    style (optional)
+      String containing CSS properties to apply to the element upon creation.
 
   Methods
   -------
@@ -74,6 +76,10 @@ All elements
     self.mouseOut
     self.mouseDown
     self.mouseUp
+    self.addClass(className)
+      Adds the specified class name to the element. 
+    self.removeClass(className)
+      Removes the specified class from the element. 
 
 Buttons
 =======
