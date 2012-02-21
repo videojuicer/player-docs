@@ -354,8 +354,8 @@ Media viewports
         and may be moved to any millisecond offset without incurring a performance penalty. Ideal for use with sliders to control playback.
       self.seekCommit
         Restores playback to the previous state after an uncommitted seek.
-      self.setLocation(url)
-        Loads a new SMIL document into this viewport using either a remote URI or a data URI. Use the 'self.refreshed' event to perform actions when the document has loaded.
+      self.setLocation(urlOrUrlHash)
+        Loads a new SMIL document into this viewport using either a remote URI or a data URI. Use the 'self.refreshed' event to perform actions when the document has loaded. The argument "url" may either be a simple string or a hash detailing both secured and non-secured urls for your new viewport location, in the format {"url_http": "http://foo", "url_https": "https://bar"}
       self.back
         Loads a previously-loaded SMIL document by moving backwards one step along the viewport's history of loaded SMIL documents.
       self.forward

@@ -40,6 +40,15 @@ Specifies an override environment to use when setting up the loggers. Declaring 
 - Alternatives: N/A
 - Type: String (development, staging or production)
 
+HTTP setting
+------------
+
+Specifies whether or not to boot up in secure (HTTPS) mode. When enabled, all requests to the VJ API and routed via addon code will be made over secure connections. Defaults to "false".
+
+- Parameter: use_https
+- Alternatives: N/A
+- Type: Boolean
+
 Loader Style
 ------------
 
