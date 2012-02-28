@@ -1,0 +1,188 @@
+Player-v4 External JavaScript API
+=================================
+
+Methods are ran on the `instance` of the player, which can be retrieved from the DOM (typically the element holding the Flash object, `<embed>` / `<object>`). 
+Limitations (compared to the addon API)
+---------------------------------------
+
+- Internal viewport control only
+- Viewport seeking is managed
+- The player and addon's user interface can not be modified
+
+General
+-------
+
+    sessionCreate(params: { })
+    
+Loads an entirely new session into the player, having an effect similar to completely reloading the player with a new set of flashVars.
+Any options you do not specify will be held over from the currently-loaded session.
+    
+    sessionCreateWithURL(smil: String, bootstrap: String = "")
+    
+Loads an entirely new session into the player using the specified smil url and optional bootstrap url, not specifying the bootstrap will cause the player to use the previous bootstrap url. Options from the previous session are used.
+
+    sessionRefresh()
+    
+Reloads the current session, restarting the player environment.
+    
+    sessionBack()
+    
+Loads the previous session into the player.
+    
+    sessionForward()
+    
+Reloads a session that was unloaded by a call to player.sessionBack.
+    
+    isSessionReady(): Boolean
+    
+Determines whether the current session is ready for playback.
+
+    getVersion(): String
+    
+Returns the players version as a string.
+
+Embed
+-----
+
+    getViewportWidth(): Number
+    
+Returns the current width of the player.
+    
+    getViewportHeight(): Number
+    
+Returns the current height of the player.
+    
+    isFullscreen(): Boolean
+    
+Determines whether the player is currently fullscreen.
+
+Viewport
+--------
+
+    loadPresentation(url: String)
+    
+Loads a new presentation into the player from the specified url.
+
+    refresh()
+    
+Reloads the SMIL document within the player, this does not reload the players environment completely.
+
+    historyBack()
+
+Loads the previous presentation.
+
+    historyForward()
+    
+Reloads a presentation that was unloaded by a call to player.historyBack.
+
+    resume()
+  
+Resumes playback of the current session.
+
+    pause()
+    
+Pauses playback of the current session.
+
+    seek(target: Number)
+    
+Seeks the player to the specified target.
+
+    playingNow(): Boolean
+    
+Determines whether the player is currently playing, returns true if so.
+
+    getLocation(): String
+    
+Returns the location of the SMIL document the player is currently using.
+
+    getDuration(): Number
+    
+Retrieves the duration of the current session.
+
+    getOffset(): Number
+    
+Retrieves the current offset of the player.
+
+    getVolume(): Number
+    
+Gets the current volume setting of the player, as a number between 0 - 100.
+
+    setVolume(target: Number)
+    
+Sets the players volume to the specified value, from 0 - 100.
+
+Listeners
+---------
+
+    addListener(type: String, callback: Function): Boolean
+    
+Adds a listener for the specified type, when the type is triggered the callback function will be called.
+
+## Listener Types
+  
+    player.resume
+    
+The player has been resumed.
+    
+    player.pause
+    
+The player has been paused.
+    
+    player.seek
+    
+The player was seeked.
+    
+    player.ready
+    
+The player is ready for playback to begin.
+    
+    player.unready
+    
+The player is waiting before playback can begin.
+    
+    player.duration
+    
+The players duration has changed value.
+    
+    player.volume
+    
+The players volume has been changed.
+    
+    player.muted
+    
+The players volume has been muted.
+    
+    player.unmuted
+    
+The player has been unmuted.
+    
+    player.userIdle
+    
+The user stopped interacting with the player (no mouse movement or focus was lost).
+    
+    player.userEngaged
+    
+The user re-engaged with the player (the mouse moved or focus was gained).
+    
+    player.fullscreen
+    
+The player went into fullscreen mode.
+    
+    player.windowed
+    
+The player went from fullscreen mode back into windowed mode.
+
+UI
+--
+
+    showControls()
+    
+Shows the players controls  (if its currently hidden).
+    
+    hideControls()
+    
+Hides the players controls.
+    
+    areControlsShown(): Boolean
+    
+Detects whether the controls are currently visible, returns true if they are.
