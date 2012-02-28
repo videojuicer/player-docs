@@ -1,5 +1,5 @@
-Player-v4 External JavaScript API
-=================================
+Player-v4 Browser JavaScript API
+================================
 
 Methods are ran on the `instance` of the player, which can be retrieved from the DOM (typically the element holding the Flash object, `<embed>` / `<object>`). 
 Limitations (compared to the addon API)
