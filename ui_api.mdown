@@ -522,6 +522,32 @@ Controls
 
       See global methods.
       
+  Type
+  ----
+  "Image"
+
+  Markup
+  ------
+
+      ._img (the image element)
+
+  Acceptable child elements
+  -------------------------
+
+      None
+
+  Configuration
+  -------------
+  
+      src (required)
+        The src of the image element either a HTTP uri to an image or a data uri.
+
+  Methods
+  -------
+
+      See global methods.
+
+      
 Forms
 =====
 
