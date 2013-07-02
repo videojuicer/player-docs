@@ -1,0 +1,161 @@
+# Videojuicer Player V5 API
+
+## Introduction
+The player V5 API replaces the old Player V4 API implemented in the V4 player. It makes use of the HTML [Post Message API](https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage). An exposes a set collection of methods and events that allow access to the player.
+
+## Posting a Message
+### Getting a Player instance
+The player instance is a standard iFrame so you are able to get it with the standard selectors. 
+
+```
+var player = document.getElementById('testIframe').contentWindow
+```  
+
+### Posting a message
+The Player API makes use of the PostMessage API , to post a message to the player instance you need to use the postMessage function for example 
+
+```
+player.postMessage("<MESSAGE>" , "http://player.videojuicer.com")
+```
+
+_For security it is important that you specify the origin (the second argument) as http://player.videojuicer.com failure to do so will leave you open to exploits_
+
+The message should __BE__ a valid JSON serialised object , you can turn any object in to a JSON string using 
+
+```
+JSON.stringify()
+```
+
+### Getting a reply
+The API will send back messages on events and method calls , you will need to listen for these. These will be posted back to the window from which you made the api call. To listen for message coming back from the player you will need to attach an event listener. Using jQuery this can be done with 
+
+```
+$(window).on('message' , function(e) { 
+  // do something 
+}); 
+```
+
+The API response will be on the property e.data (in the above example) and will also be a JSON serialised object , you can extract the data with 
+
+```
+JSON.parse(e.data)
+```
+
+## Methods 
+There are a number of methods that you can access on the API , the message format for a method is 
+
+```
+{
+  "method":"<METHOD NAME>",
+}
+```
+
+you can pass arguments by adding properties that have the arg keyword, 
+
+```
+{
+  "method":"setVolume",
+  "arg:value":50
+}
+```
+
+when a method is carried out it will respond with 
+
+```
+{
+  "method":"resume",
+  "message":"sent"
+}
+```
+
+### Method List 
+* player.hello - displays information about the player , and API versions , this can be used to check that you have access to the player.
+
+__Example Response__
+```
+{ 
+  "version":"5.0.361 13-06-27 09:08",
+  "name":"Videojuicer Player",
+  "api":"2.0.1"
+}  
+```
+
+* player.resume - starts playback
+* player.pause  - pauses playback
+* player.mute   - mutes the sound (i.e. sets the volume to 0)
+* player.unmute - unmutes the sound _NOT available in player V4_
+* setVolume(arg:value) - sets the volume to arg value in %
+* seekTo(arg:value) - sets the player head to the value of arg:value , this in milliseconds 
+* player.offset - returns the current position of the play head in milliseconds 
+
+__Example Response__
+```
+{"method":"player.offset","value":7626.666}
+```
+
+* player.duration - returns the total length of the current video in milliseconds 
+
+__Example Response__
+```
+{"method":"player.duration","value":225390}
+``` 
+
+* player.isLive - returns whether the video been viewed is a live stream or not _NOT available in player V4_
+
+__Example Response__
+```
+{"method":"player.isLive","value":false}
+```
+
+* Player.isPlaying - returns whether the video been viewed is currently playing
+
+__Example Response__
+```
+{"method":"player.isPlaying","value":false}
+```
+
+## Events
+Certain events can be bound so that you can receive a postMessage when they are triggered 
+
+To bind an event use "on" , the format is 
+
+```
+{"on" : "<EVENT NAME>"}
+```
+
+_Note when using the raw postMessage API you will need to react to these events in the $(window).on callback , you are unable to directly bind events , to listeners
+
+when you bind an event the player will let you know its been bound by responding with 
+
+```
+{"bound":"player.pause"}
+```
+
+Through the message API. When an event is triggered the player will respond with 
+
+```
+{"event":"player.pause"}
+```
+
+### Event List
+* player.pause - when playback is paused
+* player.resume - when playback is started or resumed 
+* player.volume - when the players volume is changed
+* player.mute   - when sound is muted 
+* player.unmute - when sound is un-muted 
+* player.offset - when the players offset changes
+* player.duration - when the players duration is resolved 
+
+## Errors
+If there is an error, then you will receive a error message through the post message API.
+
+__Example__
+
+```
+{
+  "error":"api error",
+  "message":"unknown , or disallowed command called player.welcome"
+}
+```
+* error - contains the error that was triggered most API errors will be of type "api error"
+* message - more information about the error that was triggered
